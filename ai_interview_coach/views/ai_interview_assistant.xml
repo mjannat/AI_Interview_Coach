@@ -1,0 +1,62 @@
+<odoo>
+    <!-- Form View -->
+    <record id="view_ai_interview_form" model="ir.ui.view">
+        <field name="name">ai.interview.coach.form</field>
+        <field name="model">ai.interview.coach</field>
+        <field name="arch" type="xml">
+            <form string="AI Interview Coach">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="Enter Job Title"/>
+                            <field name="job_description" placeholder="Enter Job Description"/>
+                            <button name="generate_questions" string="Generate Questions" type="object" class="oe_highlight" icon="fa-magic"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <!-- Questions Section -->
+                        <page string="Generated Questions">
+                                <field name="interview_questions" placeholder="AI-generated questions will appear here" nolabel="1"/>
+                        </page>
+
+                        <!-- User Response Section -->
+                        <page string="User Response">
+                            <group>
+                                <field name="user_response" placeholder="Enter your response to the interview questions"/>
+                                <button name="analyze_response" string="Analyze Response" type="object" class="oe_highlight" icon="fa-comment"/>
+                            </group>
+                        </page>
+
+                        <!-- AI Feedback Section -->
+                        <page string="AI Feedback">
+                                <field name="ai_feedback" nolabel="1" readonly="1" placeholder="Feedback from AI will appear here"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_ai_interview_tree" model="ir.ui.view">
+        <field name="name">ai.interview.coach.tree</field>
+        <field name="model">ai.interview.coach</field>
+        <field name="arch" type="xml">
+            <tree string="AI Interview Coach">
+                <field name="name"/>
+                <field name="interview_questions"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_ai_interview_coach" model="ir.actions.act_window">
+        <field name="name">AI Interview Coach</field>
+        <field name="res_model">ai.interview.coach</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_ai_interview" name="AI Interview Coach"  action="action_ai_interview_coach"/>
+</odoo>
