@@ -14,7 +14,7 @@ class AIInterviewCoach(models.Model):
 
     def generate_questions(self):
         """Generates interview questions using Gemini API"""
-        genai.configure(api_key="AIzaSyCVvRdBfozVuAMLdx5Dr1DWchHeoQF5Z7c")
+        genai.configure(api_key="key")
 
         prompt = f"Generate 5 interview questions for the following job description:\n\n{self.job_description}"
         model = genai.GenerativeModel("gemini-pro")
@@ -24,7 +24,7 @@ class AIInterviewCoach(models.Model):
 
     def analyze_response(self):
         """Analyzes the interview response using Gemini API"""
-        genai.configure(api_key="AIzaSyCVvRdBfozVuAMLdx5Dr1DWchHeoQF5Z7c")
+        genai.configure(api_key="key")
 
         prompt = f"Analyze this response for the following job interview question. Provide feedback on clarity, correctness, and professionalism.\n\nQuestion: {self.interview_questions}\nResponse: {self.user_response}"
         model = genai.GenerativeModel("gemini-pro")
