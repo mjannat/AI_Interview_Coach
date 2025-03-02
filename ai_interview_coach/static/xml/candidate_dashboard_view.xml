@@ -1,0 +1,21 @@
+<odoo>
+    <template id="candidate_dashboard" name="Candidate Dashboard">
+        <t t-if="interview.status == 'in_progress'">
+            <div class="alert alert-info">
+                <h4>Time Left: <span id="timeLeft" t-esc="time_left"/> minutes</h4>
+            </div>
+            <form action="/candidate/submit_answer" method="POST">
+                <div class="form-group">
+                    <label for="question">Question</label>
+                    <textarea name="user_response" class="form-control" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Answer</button>
+            </form>
+        </t>
+        <t t-if="interview.status == 'expired'">
+            <div class="alert alert-danger">
+                <h4>Your interview has expired!</h4>
+            </div>
+        </t>
+    </template>
+</odoo>
