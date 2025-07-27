@@ -1,20 +1,18 @@
 version: '3.8'
 
 services:
-
   db:
-    container_name: odoo_postgres_17_db
+    container_name: odoo_postgres_15_db
     image: postgres:15-alpine
+    env_file:
+      - .env_db
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: ${POSTGRES_USER:-odoo}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-odoo_password}
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
-      - "6434:5432"
+      - "5435:5432"
     volumes:
       - odoo-db-data:/var/lib/postgresql/data/pgdata
-    restart: unless-stopped
+    restart: on-failure
     networks:
       - mime-connect-docker-net
     healthcheck:
@@ -27,40 +25,25 @@ services:
 
   odoo17_web:
     container_name: odoo17_web
+    image: odoo:17.0
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        ODOO_ENV: ${ODOO_ENV:-production}
+    command: odoo -u all
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     ports:
       - "8069:8069"
+    expose:
+      - "8069"
     volumes:
       - odoo-web-data:/var/lib/odoo
-    restart: unless-stopped
+      - ./config:/etc/odoo
+      - ./ai_interview_coach:/mnt/extra-addons
+      - ./requirements.txt:/requirements.txt
+    restart: always
     networks:
       - mime-connect-docker-net
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8069/web/health || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    deploy:
-      resources:
-        limits:
-          cpus: '0.75'
-          memory: 1G
-    environment:
-      ODOO_ENV: ${ODOO_ENV:-production}
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: ${POSTGRES_USER:-odoo}
-      DB_PASSWORD: ${POSTGRES_PASSWORD:-odoo_password}
-      # Add other Odoo env vars as needed
-    security_opt:
-      - no-new-privileges:true
 
 networks:
   mime-connect-docker-net:
