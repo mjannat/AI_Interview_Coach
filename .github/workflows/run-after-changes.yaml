@@ -1,0 +1,22 @@
+# .github/workflows/run-after-changes.yml
+name: Trigger After Change Listing
+
+on:
+  workflow_run:
+    workflows: ["List Changed Files"]
+    types:
+      - completed
+
+jobs:
+  run-next:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: changed-files
+
+      - name: Display Changed Files
+        run: cat changed_files.txt

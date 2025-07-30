@@ -1,0 +1,30 @@
+# .github/workflows/list-changed-files.yml
+name: List Changed Files
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  list-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      changed-files: ${{ steps.changed.outputs.files }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get list of changed files
+        id: changed
+        run: |
+          FILES=$(git diff --name-only HEAD^ HEAD)
+          echo "$FILES" > changed_files.txt
+          echo "files=$FILES" >> $GITHUB_OUTPUT
+
+      - name: Upload changed files as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: changed-files
+          path: changed_files.txt
